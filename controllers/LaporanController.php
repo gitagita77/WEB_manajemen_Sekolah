@@ -34,6 +34,7 @@ class LaporanController extends BaseController
             'code' => $code
         ];
 
+        // Render official print view for all reports
         $this->view('laporan/print_template', $data);
     }
 
@@ -64,6 +65,8 @@ class LaporanController extends BaseController
             ['code' => 'DAFTAR_ALUMNI', 'name' => 'Daftar Alumni', 'category' => 'Master'],
             ['code' => 'SURAT_PERINGATAN', 'name' => 'Draft Surat Peringatan', 'category' => 'Administrasi'],
             ['code' => 'KARTU_POIN', 'name' => 'Kartu Poin Siswa', 'category' => 'Administrasi'],
+            ['code' => 'ABSENSI_PREMIUM', 'name' => 'Laporan Absensi Premium (Versi Magang)', 'category' => 'Akademik'],
+            ['code' => 'DATA_INDUK_SISWA', 'name' => 'Laporan Data Induk Siswa', 'category' => 'Master'],
         ];
     }
 

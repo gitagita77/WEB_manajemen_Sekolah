@@ -38,24 +38,30 @@ class BaseController
     // Authentication Check
     public function checkAuth($role = null)
     {
-        // BYPASS AUTHENTICATION AS REQUESTED
-        return true;
-
-        /* 
-        // Original Auth Logic
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
             $this->redirect('auth/login');
             return false;
         }
 
-        if ($role && $_SESSION['role'] != $role && $_SESSION['role'] != 'admin') {
-            // Admin usually has access to everything, or strictly check role
-            // If user role doesn't match and not admin, redirect
-             echo "Access Denied";
-             exit;
+        if ($role) {
+            // If user has a role session (admin/guru/siswa) check it
+            $currentRole = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+
+            // If role is array, check if current role is in array
+            if (is_array($role)) {
+                if (!in_array($currentRole, $role) && $currentRole != 'admin') {
+                    // Redirect to unauthorized or dashboard
+                    echo "Access Denied";
+                    exit;
+                }
+            } else {
+                if ($currentRole != $role && $currentRole != 'admin') {
+                    echo "Access Denied";
+                    exit;
+                }
+            }
         }
         return true;
-        */
     }
 
     public function input($key)

@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?= $title ?></title>
+    <title>
+        <?= $title ?>
+    </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
@@ -38,32 +40,36 @@
             position: relative;
         }
 
+        .logo-kiri {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 80px;
+        }
+
         .kop-text h2 {
-            font-size: 20px;
+            font-size: 24px;
             margin: 0;
             font-weight: bold;
-            text-transform: uppercase;
         }
 
         .kop-text h1 {
-            font-size: 26px;
+            font-size: 28px;
             margin: 5px 0;
             font-weight: bold;
-            text-transform: uppercase;
         }
 
         .kop-text p {
             margin: 0;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .report-title {
             text-decoration: underline;
             font-weight: bold;
-            font-size: 18px;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 15px;
         }
 
         .info-header {
@@ -89,18 +95,17 @@
             background-color: #f2f2f2 !important;
             font-weight: bold;
             text-align: center;
-            text-transform: uppercase;
         }
 
         .ttd-container {
-            margin-top: 30px;
+            margin-top: 40px;
             float: right;
             width: 300px;
             text-align: center;
         }
 
         .ttd-space {
-            height: 70px;
+            height: 80px;
         }
 
         .nama-kepala {
@@ -114,7 +119,7 @@
 <body>
 
     <div class="fixed-top p-3 no-print bg-light border-bottom d-flex justify-content-between align-items-center">
-        <strong>Pratinjau Laporan Sekolah - <?= htmlspecialchars($report_name) ?></strong>
+        <strong>Pratinjau Laporan Data Induk Siswa</strong>
         <div>
             <button onclick="window.print()" class="btn btn-primary btn-sm"><i class="bi bi-printer"></i> Cetak / Simpan
                 PDF</button>
@@ -122,25 +127,10 @@
         </div>
     </div>
 
-    <div class="container-fluid mt-5 pt-4" id="print-area">
+    <div class="container-fluid mt-5 pt-4">
         <!-- KOP SURAT -->
-        <div class="header-kop d-flex align-items-center justify-content-center">
-            <?php
-            $logoPath = 'assets/img/logo.png';
-            $logoData = '';
-            if (file_exists($logoPath)) {
-                $logoData = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
-            }
-            ?>
-            <?php if ($logoData): ?>
-                <img src="<?= $logoData ?>" alt="Logo" class="logo-kop"
-                    style="position: absolute; left: 20px; height: 90px; width: auto;">
-            <?php else: ?>
-                <div
-                    style="position: absolute; left: 20px; width: 80px; height: 80px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #666; border: 1px solid #ccc;">
-                    LOGO</div>
-            <?php endif; ?>
-            <div class="kop-text text-center">
+        <div class="header-kop">
+            <div class=" kop-text text-center">
                 <h2>PEMERINTAH KOTA BANJARMASIN</h2>
                 <h1>SMA NEGERI BANJARMASIN</h1>
                 <p>Jl. Pendidikan No. 123, Kota Banjarmasin, Kode Pos 70121</p>
@@ -149,7 +139,7 @@
         </div>
 
         <div class="text-center">
-            <div class="report-title"><?= htmlspecialchars($report_name) ?></div>
+            <div class="report-title">LAPORAN DATA INDUK SISWA</div>
 
             <table class="info-header mx-auto" style="width: auto;">
                 <tr>
@@ -160,7 +150,9 @@
                 <tr>
                     <td class="text-start pe-3">Tanggal Cetak</td>
                     <td>:</td>
-                    <td class="ps-2 text-start"><?= date('d F Y') ?></td>
+                    <td class="ps-2 text-start">
+                        <?= date('d F Y') ?>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -169,31 +161,67 @@
             <table class="table table-laporan">
                 <thead>
                     <tr>
-                        <th width="30">No</th>
-                        <?php
-                        // Get headers from first row keys
-                        $first_row = is_array($data) && isset($data[0]) ? $data[0] : [];
-                        if (isset($data['list']) && !empty($data['list']))
-                            $first_row = $data['list'][0];
-
-                        $keys = array_keys($first_row);
-                        foreach ($keys as $key):
-                            $label = ucwords(str_replace('_', ' ', $key));
-                            ?>
-                            <th><?= $label ?></th>
-                        <?php endforeach; ?>
+                        <th>No</th>
+                        <th>ID</th>
+                        <th>NIS</th>
+                        <th>NISN</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Agama</th>
+                        <th>Alamat</th>
+                        <th>RT/RW</th>
+                        <th>Kelurahan</th>
+                        <th>Kecamatan</th>
+                        <th>Kode Pos</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $rows = isset($data['list']) ? $data['list'] : $data;
-                    foreach ($rows as $i => $row):
-                        ?>
+                    <?php foreach ($data as $i => $row): ?>
                         <tr>
-                            <td class="text-center"><?= $i + 1 ?></td>
-                            <?php foreach ($row as $val): ?>
-                                <td><?= htmlspecialchars($val) ?></td>
-                            <?php endforeach; ?>
+                            <td class="text-center">
+                                <?= $i + 1 ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $row['id'] ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $row['nis'] ?>
+                            </td>
+                            <td class="text-center">
+                                <?= $row['nisn'] ?>
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($row['nama_lengkap']) ?>
+                            </td>
+                            <td class="text-center">
+                                <?= ($row['jenis_kelamin'] == 'L') ? 'Laki-laki' : 'Perempuan' ?>
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($row['tempat_lahir']) ?>
+                            </td>
+                            <td class="text-center">
+                                <?= date('d F Y', strtotime($row['tanggal_lahir'])) ?>
+                            </td>
+                            <td class="text-center">
+                                <?= htmlspecialchars($row['agama']) ?>
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($row['alamat']) ?>
+                            </td>
+                            <td class="text-center">
+                                <?= htmlspecialchars($row['rt_rw']) ?>
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($row['kelurahan']) ?>
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($row['kecamatan']) ?>
+                            </td>
+                            <td class="text-center">
+                                <?= htmlspecialchars($row['kode_pos']) ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -208,7 +236,7 @@
                 </div>
             </div>
         <?php else: ?>
-            <div class="alert alert-warning text-center">Data laporan tidak ditemukan atau kosong.</div>
+            <div class="alert alert-warning text-center">Data siswa tidak tersedia.</div>
         <?php endif; ?>
     </div>
 

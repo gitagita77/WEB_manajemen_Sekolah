@@ -14,6 +14,12 @@ class DashboardController extends BaseController
             'stats' => $model->getStats(),
             'top_prestasi' => $model->getTopPrestasi(10),
             'top_pelanggaran' => $model->getTopPelanggaran(10),
+            'absensi_today' => $model->getAbsensiToday(),
+            'student_per_class' => $model->getStudentPerClass(),
+            'attendance_trend' => $model->getAttendanceTrend(),
+            'gender_stats' => $model->getGenderStats(),
+            'upcoming_schedule' => $model->getUpcomingSchedule(5),
+            'recent_activities' => $model->getRecentActivities(10),
             'title' => 'Dashboard'
         ];
 
